@@ -34,9 +34,37 @@ async function createRegister(){
 
     console.log('Registro agregado exitosamente.');
 }
+async function deleteRegister(){
+    let data = fs.readFileSync('DATOS.DAT', 'utf-8');
+    let registros = JSON.parse(data); //aquí convertimos lo leido     
+    let borrar = await read("Ingrese el id del registro a borrar: ");
+    borrar = parseInt(borrar);
+    //console.log(registros);
+    let index = -1;
+
+    for (let i = 0; i < registros.length; i ++){ //sacamos la posición del objeto JSON si es que existe
+        let reg = registros[i];
+        if (reg.id == borrar){
+            index = i;
+        }
+    }
+    //console.log(index);
+    if (index != -1) {
+        // Eliminar el registro del arreglo
+        registros.splice(index, 1);
+        
+        // Escribir la estructura de datos actualizada en el archivo DATOS.DAT
+        fs.writeFileSync('DATOS.DAT', JSON.stringify(registros));
+        console.log('Registro eliminado exitosamente.');
+      } else {
+        console.log('Registro no encontrado.');
+      }
+}
+
 (async function () {
 
-    let regi = await createRegister();
+    //let regi = await createRegister();
+    await deleteRegister();
     rl.close();
     //console.log(regi);
   })();
